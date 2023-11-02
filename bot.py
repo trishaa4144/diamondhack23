@@ -3,6 +3,8 @@ import feedparser
 import os
 import asyncio
 import json
+import yaml 
+from llama_index import VectorStoreIndex, SimpleDirectoryReader, StorageContext, load_index_from_storage
 
 BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 article_history_file = 'article_history.yml'
@@ -55,5 +57,19 @@ async def on_message(message):
 
     if message.content.startswith('$search'):
         await message.channel.send('searching')
+
+def query(question: str):
+    if (not os.path.exists('./storage')):
+    # load the documents and create the index
+        documents = SimpleDirectoryReader('data').load_data()
+        index = VectorStoreIndex.from_documents(documents)
+    # store it for later
+        index.storage_context.persist()
+    else:
+    # load the existing index
+        storage_context = StorageContext.from_defaults(persist_dir='./storage')
+        index = load_index_from_storage(storage_context)
+        documents = SimpleDirectoryReader('data').load_data()
+        index = VectorStoreIndex.from_documents(documents)
 
 client.run(BOT_TOKEN)
