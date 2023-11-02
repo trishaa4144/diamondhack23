@@ -67,19 +67,8 @@ async def on_message(message):
         await message.channel.send(query(message.content[4:]))
 
 def query(question: str):
-    if (not os.path.exists('./storage')):
-    # load the documents and create the index
-        documents = SimpleDirectoryReader('data').load_data()
-        index = VectorStoreIndex.from_documents(documents)
-    # store it for later
-        index.storage_context.persist()
-    else:
-    # load the existing index
-        storage_context = StorageContext.from_defaults(persist_dir='./storage')
-        index = load_index_from_storage(storage_context)
-        documents = SimpleDirectoryReader('data').load_data()
-        index = VectorStoreIndex.from_documents(documents)
-    
+    storage_context = StorageContext.from_defaults(persist_dir='./storage')
+    index = load_index_from_storage(storage_context)
     query_engine = index.as_query_engine()
     response = query_engine.query(question)   
     return response 
