@@ -39,17 +39,10 @@ async def on_ready():
         feed = feedparser.parse('https://dbknews.com/feed/')
 
         for entry in feed.entries:
-            add_flag = False
-            for item in entry['tags']:
-                if item['term'] == "Campus" or item['term'] == "Campus Life":
-                    add_flag = True
-
-            if add_flag == True and entry.link not in article_history:
+            if entry.link not in article_history:
                 print(f"\"{entry.title}\" has not been seen yet, notifying.")
-                # contents
-                contents = entry['content'][0]['value']
-                await first_channel.send(f"New article from The Diamondback:\n**{entry.title}**\n{entry.link}\n")
-
+                await first_channel.send(f"New article from The Diamondback!:\n**{entry.title}**\n{entry.link}")
+                # We can use GPT to summarize the article contents (key: entry[content][value]) here
                 article_history.add(entry.link)
         
         save_article_history()
@@ -64,8 +57,6 @@ async def on_message(message):
 
     if message.content.startswith('$search'):
         await message.channel.send('searching')
-    if message.content.startswith('$ask'):
-        query(message.content[4:])
 
 def query(question: str):
     if (not os.path.exists('./storage')):
@@ -80,5 +71,10 @@ def query(question: str):
         index = load_index_from_storage(storage_context)
         documents = SimpleDirectoryReader('data').load_data()
         index = VectorStoreIndex.from_documents(documents)
+    
+    query_engine = index.as_query_engine()
+    response = query_engine.query(question)   
+    return response 
+
 
 client.run(BOT_TOKEN)
