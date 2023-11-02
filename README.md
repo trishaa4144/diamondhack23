@@ -1,8 +1,8 @@
 # diamondhack23
 
-![alt text](https://github.com/trishaa4144/diamondhack23/blob/main/DBK_Hackathon_Project_Outline.png?raw=true)
+![alt text](DBK Hackathon Project Outline.png)
 
-
+DBK Hackathon Project Outline.png
 ## Setup
 1. Install Python 3
 2. Download dependencies: `pip3 install -r requirements.txt`
