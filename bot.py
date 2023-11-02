@@ -44,8 +44,6 @@ async def on_ready():
                 if item['term'] == "Campus" or item['term'] == "Campus Life":
                     add_flag = True
 
-            
-
             if add_flag == True and (entry.link not in article_history):
                 print(f"\"{entry.title}\" has not been seen yet, notifying.")
                 # contents
@@ -65,7 +63,8 @@ async def on_message(message):
         return
 
     if message.content.startswith('$ask'):
-        query(message.content[4:])
+        await message.channel.send("searching database...")
+        await message.channel.send(query(message.content[4:]))
 
 def query(question: str):
     if (not os.path.exists('./storage')):
