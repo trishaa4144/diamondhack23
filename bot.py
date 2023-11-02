@@ -39,10 +39,17 @@ async def on_ready():
         feed = feedparser.parse('https://dbknews.com/feed/')
 
         for entry in feed.entries:
-            if entry.link not in article_history:
+            add_flag = False
+            for item in entry['tags']:
+                if item['term'] == "Campus" or item['term'] == "Campus Life":
+                    add_flag = True
+
+            if add_flag == True and entry.link not in article_history:
                 print(f"\"{entry.title}\" has not been seen yet, notifying.")
-                await first_channel.send(f"New article from The Diamondback!:\n**{entry.title}**\n{entry.link}")
-                # We can use GPT to summarize the article contents (key: entry[content][value]) here
+                # contents
+                contents = entry['content'][0]['value']
+                await first_channel.send(f"New article from The Diamondback:\n**{entry.title}**\n{entry.link}\n")
+
                 article_history.add(entry.link)
         
         save_article_history()
