@@ -39,10 +39,19 @@ async def on_ready():
         feed = feedparser.parse('https://dbknews.com/feed/')
 
         for entry in feed.entries:
-            if entry.link not in article_history:
+            add_flag = False
+            for item in entry['tags']:
+                if item['term'] == "Campus" or item['term'] == "Campus Life":
+                    add_flag = True
+
+            
+
+            if add_flag == True and (entry.link not in article_history):
                 print(f"\"{entry.title}\" has not been seen yet, notifying.")
-                await first_channel.send(f"New article from The Diamondback!:\n**{entry.title}**\n{entry.link}")
-                # We can use GPT to summarize the article contents (key: entry[content][value]) here
+                # contents
+                contents = entry['content'][0]['value']
+                await first_channel.send(f"New article from The Diamondback:\n**{entry.title}**\n{entry.link}\n")
+
                 article_history.add(entry.link)
         
         save_article_history()
@@ -55,8 +64,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('$search'):
-        await message.channel.send('searching')
     if message.content.startswith('$ask'):
         query(message.content[4:])
 
@@ -79,4 +86,11 @@ def query(question: str):
     return response 
 
 
-client.run(BOT_TOKEN)
+if __name__ == '__main__':
+    article_history = load_article_history()
+    try:
+        client.run(BOT_TOKEN)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        save_article_history()
