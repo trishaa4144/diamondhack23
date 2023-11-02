@@ -64,6 +64,8 @@ async def on_message(message):
 
     if message.content.startswith('$search'):
         await message.channel.send('searching')
+    if message.content.startswith('$ask'):
+        query(message.content[4:])
 
 def query(question: str):
     if (not os.path.exists('./storage')):
