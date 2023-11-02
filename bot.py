@@ -61,10 +61,12 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-
+    
     if message.content.startswith('$ask'):
         await message.channel.send("searching database...")
-        await message.channel.send(query(message.content[4:]))
+        async with message.channel.typing():
+            msg = query(message.content[4:]) 
+        await message.channel.send(msg)
 
 def query(question: str):
     storage_context = StorageContext.from_defaults(persist_dir='./storage')
