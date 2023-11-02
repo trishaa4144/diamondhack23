@@ -2,7 +2,7 @@ import discord
 import feedparser
 import os
 import asyncio
-import yaml
+import json
 
 BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 article_history_file = 'article_history.yml'
@@ -56,11 +56,4 @@ async def on_message(message):
     if message.content.startswith('$search'):
         await message.channel.send('searching')
 
-if __name__ == '__main__':
-    article_history = load_article_history()
-    try:
-        client.run(BOT_TOKEN)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-    finally:
-        save_article_history()
+client.run(BOT_TOKEN)
