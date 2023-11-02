@@ -1,6 +1,6 @@
 # diamondhack23
 
-![alt text](https://github.com/trishaa4144/diamondhack23/blob/main/DBKHackathonProjectOutline.png?raw=true)
+![alt text](https://github.com/trishaa4144/diamondhack23/blob/main/DBK_Hackathon_Project_Outline.png?raw=true)
 
 
 ## Setup
