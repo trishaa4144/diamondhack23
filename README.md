@@ -8,6 +8,8 @@
 2. Download dependencies: `pip3 install -r requirements.txt`
 3. Add discord bot token to your environment
     - `export DISCORD_BOT_TOKEN=<your_token_here>`
+4. Add your OpenAI API Token to your environment
+    - `export OPENAI_API_KEY=<your_token_here>`
 
 ## Writeup
 The Discord bot for all of your UMD-related info needs: 
